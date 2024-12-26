@@ -69,10 +69,15 @@ runs:
         exit-code: 1
         output: trivy-results.sarif
         skip-setup-trivy: true
-        trivyignores: .trivyignore.yaml
       env:
         TRIVY_DB_REPOSITORY: "public.ecr.aws/aquasecurity/trivy-db:2"
 
+    - name: cat
+      if: always()
+      shell: bash
+      run: |
+        cat trivy-results.sarif
+        
     - name: add trivy failure check results to data file
       shell: bash
       if: always() && steps.trivy-check.conclusion == 'failure'
